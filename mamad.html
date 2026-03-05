@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>מחירון כניסה לממ"ד</title>
+  <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700;900&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0d1f3c;
+      --navy-mid: #1a3560;
+      --gold: #c8a84b;
+      --gold-light: #e8c96a;
+      --cream: #f5f0e8;
+      --red-alert: #b52b2b;
+      --gray-line: #c2bfb8;
+      --text-dark: #1a1a1a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #e8e0d0;
+      font-family: 'Assistant', sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px 16px; /* צומצם למעלה ולמטה */
+    }
+
+    /* ═══════════ STAMP BACKGROUND TEXTURE ═══════════ */
+    .page-wrapper {
+      background: var(--cream);
+      width: 100%;
+      max-width: 800px;
+      border: 4px double var(--navy);
+      box-shadow: 0 0 0 8px var(--navy), 0 10px 40px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-wrapper::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 28px, rgba(13,31,60,0.04) 28px, rgba(13,31,60,0.04) 29px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ═══════════ TOP BAR ═══════════ */
+    .top-bar {
+      background: var(--navy);
+      color: var(--gold-light);
+      text-align: center;
+      padding: 6px 15px; /* צומצם גובה */
+      font-family: 'Assistant', sans-serif;
+      font-size: 0.72rem;
+      letter-spacing: 2px; /* צומצם ריווח אותיות מעט */
+      font-weight: 700;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+      line-height: 1.4; /* צומצם מרווח שורות */
+    }
+
+    /* ═══════════ HEADER ═══════════ */
+    header {
+      background: linear-gradient(160deg, var(--navy) 0%, var(--navy-mid) 100%);
+      color: var(--cream);
+      padding: 20px 20px 15px; /* צומצם משמעותית */
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      border-bottom: 5px solid var(--gold);
+    }
+
+    .header-emblem {
+      font-size: 2.2rem; /* הוקטן מעט */
+      line-height: 1;
+      margin-bottom: 5px; /* צומצם מרווח */
+      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.5));
+    }
+
+    header h1 {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: clamp(1.6rem, 4vw, 2.4rem); /* הוקטן במעט */
+      font-weight: 900;
+      color: var(--gold-light);
+      letter-spacing: 1px;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .doc-number {
+      font-size: 0.68rem;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin: 4px 0 10px; /* צומצם מרווח */
+      opacity: 0.85;
+    }
+
+    .subtitle {
+      font-size: clamp(0.78rem, 2vw, 0.92rem);
+      color: #c9d4e8;
+      line-height: 1.4; /* צומצם מרווח שורות */
+      max-width: 560px;
+      margin: 0 auto;
+      font-style: italic;
+      border-top: 1px solid rgba(200,168,75,0.35);
+      padding-top: 8px; /* צומצם מרווח */
+    }
+
+    /* ═══════════ CONTENT AREA ═══════════ */
+    .content {
+      padding: 0 20px 20px; /* צומצמו צדדים ולמטה */
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ═══════════ SECTION ═══════════ */
+    .section {
+      margin-top: 16px; /* צומצם מרווח בין חלקים */
+    }
+
+    .section-title {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px; /* צומצם */
+      color: var(--cream);
+      background: var(--navy);
+      padding: 5px 12px; /* צומצם גובה */
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-right: 5px solid var(--gold);
+    }
+
+    .section-title .sec-icon { font-size: 1rem; }
+
+    /* ═══════════ PRICE TABLE ═══════════ */
+    .price-table {
+      border: 1.5px solid var(--navy);
+      border-top: none;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 12px; /* צומצם גובה השורות */
+      border-bottom: 1px solid var(--gray-line);
+      gap: 12px;
+      transition: background 0.15s;
+    }
+
+    .price-row:last-child { border-bottom: none; }
+    .price-row:hover { background: rgba(13,31,60,0.04); }
+
+    .price-row.highlight {
+      background: rgba(181,43,43,0.06);
+    }
+
+    .item-name {
+      font-size: 0.85rem; /* הוקטן טיפונת */
+      font-weight: 600;
+      color: var(--text-dark);
+      flex: 1;
+      line-height: 1.2; /* צומצם מרווח */
+    }
+
+    .item-note {
+      font-size: 0.7rem;
+      color: #666;
+      font-weight: 400;
+      display: block;
+      font-style: italic;
+    }
+
+    .item-price {
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 0.95rem; /* הוקטן מעט */
+      font-weight: 900;
+      color: var(--navy);
+      white-space: nowrap;
+      background: rgba(13,31,60,0.07);
+      padding: 2px 8px; /* צומצם */
+      border-radius: 2px;
+      border: 1px solid rgba(13,31,60,0.15);
+      min-width: 80px; /* הוקטן מעט */
+      text-align: center;
+    }
+
+    .item-price.fine {
+      color: var(--red-alert);
+      background: rgba(181,43,43,0.07);
+      border-color: rgba(181,43,43,0.2);
+    }
+
+    /* ═══════════ DIVIDER ═══════════ */
+    .ornament-divider {
+      text-align: center;
+      margin: 12px 0 0; /* צומצם משמעותית */
+      color: var(--gold);
+      font-size: 1rem;
+      letter-spacing: 4px; /* צומצם */
+      opacity: 0.7;
+    }
+
+    /* ═══════════ PAYMENT SECTION ═══════════ */
+    .payment-section {
+      margin-top: 14px; /* צומצם מרווח */
+      border: 2px solid var(--gold);
+      background: linear-gradient(135deg, rgba(13,31,60,0.03) 0%, rgba(200,168,75,0.07) 100%);
+    }
+
+    .payment-header {
+      background: linear-gradient(90deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--navy);
+      text-align: center;
+      padding: 6px 12px; /* צומצם גובה */
+      font-family: 'Frank Ruhl Libre', serif;
+      font-size: 0.9rem;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .payment-body {
+      padding: 8px 12px; /* צומצם גובה */
+      display: flex;
+      gap: 15px; /* צומצם מרווח אמצעי */
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .payment-text {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .payment-text p {
+      font-size: 0.8rem;
+      color: #444;
+      line-height: 1.4; /* צומצם מרווח שורות */
+      margin-bottom: 0px;
+    }
+
+    .qr-area {
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .qr-area img {
+      width: 90px; /* הוקטן הקוד QR */
+      height: 90px;
+      display: block;
+      border: 3px solid var(--navy);
+      margin-bottom: 4px;
+    }
+
+    .qr-label {
+      font-size: 0.6rem;
+      color: #666;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════ OFFICIAL STAMP ═══════════ */
+    .stamp-area {
+        display: flex;
+        justify-content: flex-start;
+        padding: 0 20px;
+        margin-top: -30px; /* הוגדל המרווח השלילי כדי להצמיד טוב יותר */
+        position: relative; 
+        z-index: 2;
+    }
+
+    .stamp {
+      border: 3px solid var(--red-alert);
+      border-radius: 50%;
+      width: 80px; /* הוקטנה החותמת */
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--red-alert);
+      font-family: 'Frank Ruhl Libre', serif;
+      font-weight: 900;
+      font-size: 0.55rem;
+      letter-spacing: 1px;
+      text-align: center;
+      padding: 5px;
+      transform: rotate(-12deg);
+      opacity: 0.75;
+      line-height: 1.2;
+    }
+
+    /* ═══════════ FOOTER ═══════════ */
+    footer {
+      background: var(--navy);
+      color: #aabbd4;
+      padding: 14px 20px; /* צומצם משמעותית */
+      position: relative;
+      z-index: 1;
+      border-top: 4px solid var(--gold);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* הוקטן קצת רוחב עמודות */
+      gap: 12px; /* צומצם מרווח */
+      margin-bottom: 10px; /* צומצם מרווח */
+    }
+
+    .footer-col h4 {
+      font-family: 'Frank Ruhl Libre', serif;
+      color: var(--gold-light);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      margin-bottom: 5px; /* צומצם */
+      border-bottom: 1px solid rgba(200,168,75,0.3);
+      padding-bottom: 3px;
+    }
+
+    .footer-col p, .footer-col a {
+      font-size: 0.72rem;
+      color: #9ab0c8;
+      line-height: 1.5; /* צומצם מרווח שורות */
+      display: block;
+      text-decoration: none;
+    }
+
+    .footer-col a:hover { color: var(--gold-light); }
+    
+    .complaints-link { margin-top: 4px; } /* תיקון ריווח למייל השני */
+
+    .footer-bottom {
+      border-top: 1px solid rgba(200,168,75,0.2);
+      padding-top: 8px; /* צומצם */
+      text-align: center;
+      font-size: 0.65rem;
+      color: #6a85a0;
+      letter-spacing: 1px;
+    }
+
+    /* ═══════════ PRINT STYLES ═══════════ */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .page-wrapper {
+        box-shadow: none;
+        border: 2px double var(--navy);
+        max-width: 100%;
+        width: 100%;
+      }
+      .price-row:hover { background: transparent !important; }
+      @page {
+        size: A4;
+        margin: 5mm; /* צומצמו שוליים בהדפסה כדי להבטיח שייכנס לדף אחד */
+      }
+    }
+
+    @media (max-width: 520px) {
+      .content { padding: 0 10px 15px; }
+      header { padding: 18px 10px 14px; }
+      .payment-body { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; gap: 8px;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+  <div class="top-bar">
+    מסמך רשמי מס׳ מ.מ.ד / 2026 / א׳ &nbsp;|&nbsp; תקף בשעת חירום בלבד <br/>
+    הנהלת הממ"ד שומרת לעצמה את הזכות לסרב לכל שינוי באתר לרבות מבנה האתר, השירותים המוצעים בו, תוכנם, היקפם וזמינותם בכל עת
+  </div>
+
+
+  <header>
+    <div class="header-emblem">🛡️</div>
+    <div class="doc-number">נוהל מס׳ 007-מ.מ.ד &nbsp;•&nbsp; גרסה 3.1 &nbsp;•&nbsp; מאושר על ידי: אני😁</div>
+    <h1>מחירון כניסה לממ"ד</h1>
+    <p class="subtitle">
+      הכניסה מותנית בתשלום. <br/>
+      ההנהלה אינה אחראית על נוחות השינה, נשנושים אישיים שנאכלו, או על מה שיקרה אם תעירו את הישן.
+    </p>
+  </header>
+
+  <div class="content">
+
+    <div class="section">
+      <div class="section-title">
+        <span class="sec-icon">🚪</span> כניסות מזדמנות
+      </div>
+      <div class="price-table">
+        <div class="price-row">
+          <div class="item-name">
+            כניסה בסיסית
+            <span class="item-note">עד 10 דקות לפי ההנחיות, מקום עמידה בלבד הכולל הישענות על הקיר, ללא שיחות📵</span>
+          </div>
+          <div class="item-price">₪5.90</div>
+        </div>
+        <div class="price-row">
+          <div class="item-name">
+            ישיבה על המיטה     
+       <span class="item-note"> ללא שימוש בכלי מיטה שלי🛏️!</span>
+          </div>
+          <div class="item-price">₪7.00</div>
+        </div>
+
+        <div class="price-row">
+          <div class="item-name">
+            ישיבה על הכיסא שלי
+            <span class="item-note">לא כולל שינוי גובה ותנוחות</span>
+          </div>
+          <div class="item-price">₪9.90</div>
+        </div>
+
+
+        <div class="price-row">
+          <div class="item-name">
+            חריגת זמן⏱️🔴 
+            <span class="item-note">עבור כל דקה נוספת אחרי שהתקבל אישור לצאת</span>
+          </div>
+          <div class="item-price">₪0.99 / דק׳</div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <span class="sec-icon">🎟️</span>  מנויים מיוחדים (הכוללים ישיבה על המיטה)
+      </div>
+      <div class="price-table">
+        <div class="price-row">
+          <div class="item-name">
+            מנוי "צבע אדום" שבועי
+            <span class="item-note">כניסות ללא הגבלה — שבוע רץ, כולל סופ"ש. (לא כולל אזעקות לילה! )</span>
+          </div>
+          <div class="item-price">₪199.90 / שבוע</div>
+        </div>
+        <div class="price-row">
+          <div class="item-name">
+            כרטיסיית 10 אזעקות
+            <span class="item-note">תקפה לשנה🗓️, לא ניתן להעביר לאחרים. (האזעקה ה- 11 עלינו!😋)</span>
+          </div>
+          <div class="item-price">₪60.90</div>
+        </div>
+        <div class="price-row highlight">
+          <div class="item-name">
+            מנוי לילה 🌙
+            <span class="item-note">המנוי כולל מזרון בלבד, מהשעות 23:00 ועד 7:00 (עליכם להביא כלי מיטה!)</span>
+          </div>
+          <div class="item-price">₪70.00 / לילה</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <span class="sec-icon">⚠️</span>  קנסות ותעריפי אקסטרה
+      </div>
+      <div class="price-table">
+        <div class="price-row">
+          <div class="item-name">
+            קנס "הערת אותי" 😴
+            <span class="item-note">לא משנה מה הסיבה, ולא משנה שאני נרדם בקלות!</span>
+          </div>
+          <div class="item-price fine">₪14.90</div>
+        </div>
+        <div class="price-row">
+          <div class="item-name">
+            מס פאניקה 😱
+            <span class="item-note">הכולל בכי😭/צעקות😱/ טונים גבוהים📢/דיבורים שמפריעים לי💬</span>
+          </div>
+          <div class="item-price fine">₪5.00 / הפרעה</div>
+        </div>
+        <div class="price-row">
+          <div class="item-name">
+            שירותי תקשורת📡
+            <span class="item-note">הכוללים ליווי אישי צמוד של מומחה, Wi-Fi🛜 ועוד (הסיסמא משתנה בכל יום)</span>
+          </div>
+          <div class="item-price">₪15.00</div>
+        </div>
+        <div class="price-row">
+          <div class="item-name">
+            שימוש בשקע חשמל לטעינת טלפון🔋
+            <span class="item-note">לכל שעת טעינה, המחיר כולל מטען  </span>
+          </div>
+          <div class="item-price">₪4.00 / שעה</div>
+        </div>
+        <div class="price-row">
+          <div class="item-name">
+            ביקורת על הממ"ד, הסדר, הריח, או הטמפרטורה
+            <span class="item-note"> אני גם ככה לא נהנה מהמצב, אל תקשו עליי</span>
+          </div>
+          <div class="item-price fine">₪4.00 / הערה</div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="ornament-divider">— ✦ —</div>
+
+    <div class="payment-section">
+      <div class="payment-header">
+        💳 &nbsp; עמדת תשלום&nbsp; 💳
+      </div>
+      <div class="payment-body">
+        <div class="payment-text">
+        <p>
+            ההנהלה מאמינה בשקיפות מלאה ובחוויית תשלום חלקה — 
+            גם כשהצבע <span style="color: red; font-weight: bold;">אדום</span>😉.<br/>
+            ניתן לשלם מראש, במהלך האזעקה, או מיד לאחר ה-"כל בסדר".
+            <br/><strong>אין תשלום? אין כניסה⛔</strong>
+        </p>
+   
+        </div>
+        <div class="qr-area">
+          <img src="הביט שלי.png" alt="קוד QR לתשלום" class="qr-code">     
+          <div class="qr-label">סרוק לתשלום</div>
+        </div>
+      </div>
+      <div class="stamp-area">
+        <div class="stamp">אושר<br/>ע"י<br/>ההנהלה(אני)<br/>2026</div>
+      </div>
+    </div>
+
+  </div><footer>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>📞 יצירת קשר</h4>
+        <a href="tel:050-0000000">📱 052-8020784</a>
+      </div>
+      <div class="footer-col">
+        <h4>✉️ דואר אלקטרוני</h4>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=yair52003@gmail.com&su=יאיר המלך" target="_blank" class="complaints-link">
+            
+            <span class="email-address">yair52003@gmail.com</span>
+        </a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=Lo-Echpat-Li-MA-Atem-Rotzim@gmail.com&su=תלונה+רשמית+מהממד" target="_blank" class="complaints-link">
+            תלונות:<br>
+            <span class="email-address">Lo-Echpat-Li-MA-Atem-Rotzim@gmail.com</span>
+        </a>
+
+        </div>
+      <div class="footer-col">
+        <h4>🌐 רשתות חברתיות</h4>
+        <a href="https://www.instagram.com/_yair_levi/">אינסטגרם: @_yair_levi</a>
+        <a href="https://www.facebook.com/yair.levi.391">פייסבוק: יאיר לוי</a>
+        <a href="https://t.me/+j8m4LmVal9IwZTVk">טלגרם: עדכוני צבע אדום</a>
+      </div>
+      <div class="footer-col">
+        <h4>⚖️ תנאים חשובים</h4>
+        <p>• ההנהלה לא אחראית לנחירות.</p>
+        <p>
+            • כניסת ילדים מתחת לגיל 3 — חינם. (עדי את בסדר)
+        </p>
+        <p>
+           • אני שומר על הזכות לסרב לכניסה ללא הסבר.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 ממ"ד פרמיום בע"מ &nbsp;•&nbsp; כל הזכויות שמורות *לי* &nbsp;•&nbsp;  במקרה אמת — נכנסים לממ"ד בזול ובמהירות. 🛡️
+    </div>
+  </footer>
+
+</div></body>
+</html>
